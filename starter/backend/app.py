@@ -217,8 +217,8 @@ def add_actors():
     
     actor.insert()
 
-  except:
-    print('error')
+  except BaseException:
+    abort(404)   
   return jsonify({
       'success': True
   }), 200
@@ -229,17 +229,89 @@ PATCH /movies/id
 '''
 @app.route('/movies/<int:id>', methods=['PATCH'])
 def update_movies(id):
+
   body = request.get_json()
   new_title = body.get('title')
-  print(body)
+  new_release_date = body.get('release_date')  
+
+  if ((new_title is None) or (new_release_date is None)):
+    abort(422)
+
   try:
+    # if body['title']:
+
+    # if body['release_date']:
+    #   new_release_date = body.get('release_date')  
+
     movie = Movies.query.get(id)
-    movie.title = new_title
-    
+    movies = Movies.query.order_by(Movies.id).all()
+
+    if new_title:
+      movie.title = new_title
+
+    if new_release_date:
+      movie.release_date = new_release_date
+
     movie.update()
 
-  except:
-    print('error')  
+  except BaseException:
+    abort(404)    
   return jsonify({
       'success': True
   }), 200
+
+'''
+PATCH /actors/id
+'''
+@app.route('/actors/<int:id>', methods=['PATCH'])
+def update_actors(id):
+  body = request.get_json()
+  new_name = body.get('name')
+  new_age = body.get('age')
+  new_gender = body.get('gender')
+  print(body)
+  try:
+    actor = Actors.query.get(id)
+    actor.name = new_name
+    actor.age = new_age
+    actor.gender = new_gender
+    actor.update()
+
+  except BaseException:
+    abort(404)    
+  return jsonify({
+      'success': True
+  }), 200
+
+  @app.errorhandler(400)
+  def bad_request(error):
+    return jsonify({
+      'success': False,
+      'error': False,
+      'message': 'Request not understood due to malformed syntax.'
+    }), 400
+
+  @app.errorhandler(404)
+  def not_found(error):
+    return jsonify({
+      'success': False,
+      'error': False,
+      'message': 'No matching request found.'
+    }), 404
+
+  @app.errorhandler(422)
+  def unprocessable(error):
+    return jsonify({
+      'success': False,
+      'error': False,
+      'message': 'Unable to process the contained instructions.'
+    }), 422
+
+
+  @app.errorhandler(500)
+  def internal_server_error(error):
+    return jsonify({
+      'success': False,
+      'error': False,
+      'message': 'Encountered an unexpected condition which prevented it from fulfilling the request.'
+    }), 500
