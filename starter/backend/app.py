@@ -124,7 +124,7 @@ def get_movie(jwt, id):
       abort(404)   
   return jsonify({
       'success': True,
-      'movies': movie_data
+      'movie': movie_data[0]
   }), 200
 
 '''
@@ -147,7 +147,7 @@ def get_actor(jwt, id):
       abort(404)   
   return jsonify({
       'success': True,
-      'actors': actor_data
+      'actor': actor_data[0]
   }), 200
 
 '''
@@ -160,12 +160,18 @@ def remove_movie(jwt, id):
     movie = Movies.query.get(id)
     movie.delete()
 
+    movie_data = []
+    movie_data.append({
+      "id": movie.id,
+      "title": movie.title,
+      "release_date": movie.release_date
+    })
   
   except BaseException:
       abort(404)   
   return jsonify({
       'success': True,
-      'id': id
+      'deleted_movie': movie_data[0]
   }), 200
 
 '''
@@ -177,13 +183,19 @@ def remove_actor(jwt, id):
   try:
     actor = Actors.query.filter(Actors.id == id).one_or_none()
     actor.delete()
-
+    actor_data = []
+    actor_data.append({
+      "id": actor.id,
+      "name": actor.name,
+      "age": actor.age,
+      "gender": actor.gender
+    })
   
   except BaseException:
       abort(404)   
   return jsonify({
       'success': True,
-      'id': id
+      'deleted_actor': actor_data[0]
   }), 200
 
 
@@ -217,7 +229,7 @@ def add_movies(jwt):
       abort(404)   
   return jsonify({
       'success': True,
-      'movie': movie_data
+      'created_movie': movie_data[0]
   }), 200
 
 '''
@@ -250,11 +262,12 @@ def add_actors(jwt):
       "age": actor.age, 
       "gender": actor.gender
     })
+
   except BaseException:
     abort(404)   
   return jsonify({
       'success': True,
-      'actor': actor_data
+      'created_actor': actor_data[0]
   }), 200
 
 
@@ -297,7 +310,7 @@ def update_movies(jwt, id):
     abort(404)    
   return jsonify({
       'success': True,
-      'movie': movie_data
+      'updated_movie': movie_data[0]
   }), 200
 
 '''
@@ -334,7 +347,7 @@ def update_actors(jwt, id):
     abort(404)    
   return jsonify({
       'success': True,
-      'actor': actor_data
+      'updated_actor': actor_data[0]
   }), 200
 
 @app.errorhandler(400)
