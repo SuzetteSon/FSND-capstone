@@ -17,7 +17,7 @@ I worked within a virtual environment whenever using Python for projects. Instru
 Once you have your virtual environment setup and running, install dependencies by naviging to the `/backend` directory and running:
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 This will install all of the required packages we selected within the `requirements.txt` file.

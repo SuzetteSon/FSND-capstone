@@ -11,7 +11,7 @@ from flask_wtf import Form
 from sqlalchemy.dialects.postgresql import ARRAY
 from flask_cors import CORS
 from models import setup_db, Movies, Actors
-
+from auth import AuthError, requires_auth
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -62,7 +62,8 @@ def index():
 GET /movies
 '''
 @app.route('/movies', methods=['GET'])
-def get_all_movies():
+@requires_auth('get:movies')
+def get_all_movies(jwt):
   try:
     movies = Movies.query.all()
     movie_data = []
@@ -83,7 +84,8 @@ def get_all_movies():
 GET /actors
 '''
 @app.route('/actors', methods=['GET'])
-def get_all_actors():
+@requires_auth('get:actors')
+def get_all_actors(jwt):
   try:
     actors = Actors.query.all()
     
@@ -106,7 +108,8 @@ def get_all_actors():
 GET /movies/id
 '''
 @app.route('/movies/<int:id>', methods=['GET'])
-def get_movie(id):
+@requires_auth('get:movies_id')
+def get_movie(jwt, id):
   try:
     movie = Movies.query.get(id)
 
@@ -128,7 +131,8 @@ def get_movie(id):
 GET /actors/id
 '''
 @app.route('/actors/<int:id>', methods=['GET'])
-def get_actor(id):
+@requires_auth('get:actors_id')
+def get_actor(jwt, id):
   try:
     actor = Actors.query.get(id)
     actor_data = []
@@ -150,7 +154,8 @@ def get_actor(id):
 DELETE /movies/id
 '''
 @app.route('/movies/<int:id>', methods=['DELETE'])
-def remove_movie(id):
+@requires_auth('delete:movies')
+def remove_movie(jwt, id):
   try:
     movie = Movies.query.get(id)
     movie.delete()
@@ -167,7 +172,8 @@ def remove_movie(id):
 DELETE /actors/id
 '''
 @app.route('/actors/<int:id>', methods=['DELETE'])
-def remove_actor(id):
+@requires_auth('delete:actors')
+def remove_actor(jwt, id):
   try:
     actor = Actors.query.filter(Actors.id == id).one_or_none()
     actor.delete()
@@ -185,29 +191,48 @@ def remove_actor(id):
 POST /movies
 '''
 @app.route('/movies', methods=['POST'])
-def add_movies():
+@requires_auth('post:movies')
+def add_movies(jwt):
   body = request.get_json()
   new_title = body.get('title')
   new_release_date = body.get('release_date')
-  print(body)
+  
+  if ((new_title is None) or (new_release_date is None)):
+    abort(422)
+
   try:
     movie = Movies(title=new_title, release_date=new_release_date )
     
     movie.insert()
 
+    movie_data = []
+
+    movie_data.append({
+      "id": movie.id,
+      "title": movie.title, 
+      "release_date": movie.release_date
+      })
+
   except BaseException:
       abort(404)   
   return jsonify({
-      'success': True
+      'success': True,
+      'movie': movie_data
   }), 200
 
 '''
 POST /actors
 '''
 @app.route('/actors', methods=['POST'])
-def add_actors():
+@requires_auth('post:actors')
+def add_actors(jwt):
   body = request.get_json()
-  print(body)
+  new_name = body.get('name')
+  new_age = body.get('age')
+  new_gender = body.get('gender')
+
+  if ((new_name is None) or (new_age is None)or (new_gender is None)):
+    abort(422)
 
   try:
     actor = Actors()
@@ -217,10 +242,19 @@ def add_actors():
     
     actor.insert()
 
+    actor_data = []
+
+    actor_data.append({
+      "id": actor.id,
+      "name": actor.name, 
+      "age": actor.age, 
+      "gender": actor.gender
+    })
   except BaseException:
     abort(404)   
   return jsonify({
-      'success': True
+      'success': True,
+      'actor': actor_data
   }), 200
 
 
@@ -228,7 +262,8 @@ def add_actors():
 PATCH /movies/id
 '''
 @app.route('/movies/<int:id>', methods=['PATCH'])
-def update_movies(id):
+@requires_auth('patch:movies')
+def update_movies(jwt, id):
 
   body = request.get_json()
   new_title = body.get('title')
@@ -238,13 +273,9 @@ def update_movies(id):
     abort(422)
 
   try:
-    # if body['title']:
-
-    # if body['release_date']:
-    #   new_release_date = body.get('release_date')  
 
     movie = Movies.query.get(id)
-    movies = Movies.query.order_by(Movies.id).all()
+    #movies = Movies.query.order_by(Movies.id).all()
 
     if new_title:
       movie.title = new_title
@@ -254,22 +285,35 @@ def update_movies(id):
 
     movie.update()
 
+    movie_data = []
+
+    movie_data.append({
+      "id": movie.id,
+      "title": movie.title, 
+      "release_date": movie.release_date
+      })
+
   except BaseException:
     abort(404)    
   return jsonify({
-      'success': True
+      'success': True,
+      'movie': movie_data
   }), 200
 
 '''
 PATCH /actors/id
 '''
 @app.route('/actors/<int:id>', methods=['PATCH'])
-def update_actors(id):
+@requires_auth('patch:actors')
+def update_actors(jwt, id):
   body = request.get_json()
   new_name = body.get('name')
   new_age = body.get('age')
   new_gender = body.get('gender')
-  print(body)
+  
+  if ((new_name is None) or (new_age is None)or (new_gender is None)):
+    abort(422)
+
   try:
     actor = Actors.query.get(id)
     actor.name = new_name
@@ -277,41 +321,51 @@ def update_actors(id):
     actor.gender = new_gender
     actor.update()
 
+    actor_data = []
+
+    actor_data.append({
+      "id": actor.id,
+      "name": actor.name, 
+      "age": actor.age, 
+      "gender": actor.gender
+    })
+
   except BaseException:
     abort(404)    
   return jsonify({
-      'success': True
+      'success': True,
+      'actor': actor_data
   }), 200
 
-  @app.errorhandler(400)
-  def bad_request(error):
-    return jsonify({
-      'success': False,
-      'error': False,
-      'message': 'Request not understood due to malformed syntax.'
-    }), 400
+@app.errorhandler(400)
+def bad_request(error):
+  return jsonify({
+    'success': False,
+    'error': 400,
+    'message': 'Request not understood due to malformed syntax.'
+  }), 400
 
-  @app.errorhandler(404)
-  def not_found(error):
-    return jsonify({
-      'success': False,
-      'error': False,
-      'message': 'No matching request found.'
-    }), 404
+@app.errorhandler(404)
+def not_found(error):
+  return jsonify({
+    'success': False,
+    'error': 404,
+    'message': 'No matching request found.'
+  }), 404
 
-  @app.errorhandler(422)
-  def unprocessable(error):
-    return jsonify({
-      'success': False,
-      'error': False,
-      'message': 'Unable to process the contained instructions.'
-    }), 422
+@app.errorhandler(422)
+def unprocessable(error):
+  return jsonify({
+    'success': False,
+    'error': 422,
+    'message': 'Unable to process the contained instructions.'
+  }), 422
 
 
-  @app.errorhandler(500)
-  def internal_server_error(error):
-    return jsonify({
-      'success': False,
-      'error': False,
-      'message': 'Encountered an unexpected condition which prevented it from fulfilling the request.'
-    }), 500
+@app.errorhandler(500)
+def internal_server_error(error):
+  return jsonify({
+    'success': False,
+    'error': 500,
+    'message': 'Encountered an unexpected condition which prevented it from fulfilling the request.'
+  }), 500

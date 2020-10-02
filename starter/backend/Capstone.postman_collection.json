@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "5a40453d-962c-470c-b48e-d44eadfb9da4",
+		"name": "Capstone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Casting Director",
+			"item": [
+				{
+					"name": "/movies/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/actor/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actor",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/movies",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"joker\",\n    \"release_date\": \"2017-07-04*13:23:55\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/movies",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/movies/id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"bad guys\",\n    \"release_date\": \"2008-07-04*13:23:55\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/movies/8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"movies",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors/id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"gloria\",\n    \"age\": \"44\",\n    \"gender\": \"F\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/actors/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actors",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"age\": \"30\",\n      \"gender\": false,\n      \"name\": \"Sharon Stone\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/actors",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/movies/id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors/id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/actors/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actors",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTExNjY5MTYyMDA1ODAxNjEyMDE5IiwiYXVkIjpbImhvbGx5d29vZCIsImh0dHBzOi8vZnVsbHN0YWNrdWRhY2l0eS5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjAxNjI2NDc1LCJleHAiOjE2MDE2MzM2NzUsImF6cCI6IldqM3FETWdaMGlOcUg0ZmNZaXFlWDFxVEhqcEJmU3R6Iiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTogYWN0b3JzIiwiZGVsZXRlOm1vdmllcyIsImdldDphY3RvcnMiLCJnZXQ6YWN0b3JzX2lkIiwiZ2V0Om1vdmllcyIsImdldDptb3ZpZXNfaWQiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.GJOQdAWDnTEbezNaD4XIqz6vbjZzmVXE1x9nYI-E2reAOY8a_gagDDqhYrMUaUUnpiCemclMnCcKzbLG8IMiaxqp9N3IKuOTnWVHer4KqeZLNSmWRpDfncrOC_-w3P_VSxwo0aEaCR-mOP4MArYF6UFBPcSiS0QtwSv4EciKshioPgBgRCvUQgpng3LKhm4QIjAM0j4X07rJNXP2Z9KhsIq-8S9JiupFa1T--7ISvtUmpExImGM3yDlO2F-4tVVRXr-vrtLbAyrhIZElZfUR6ul67yUvOV0QKmQGEVDZ7u7AIqaDoy-vAmYgLYMbWN3aEMWtFQ7pNi5rg8BnYxI9NQ",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a26ac775-be4f-41d2-8b4a-c945d05432a9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "670d097c-be64-4ca0-b2dc-50a254a92e0a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Casting Assistant",
+			"item": [
+				{
+					"name": "/movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVmNGRmYjFmNTkzNTgwMDA2NzU1MTE4ZiIsImF1ZCI6ImhvbGx5d29vZCIsImlhdCI6MTYwMTYyMjk4NiwiZXhwIjoxNjAxNjMwMTg2LCJhenAiOiJXajNxRE1nWjBpTnFINGZjWWlxZVgxcVRIanBCZlN0eiIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiXX0.VhFT4pUlF11uucw8tvx9bINGZoRtI2AqINL15I4axIjODJlqf2rg5rd1vLXGGSkg4EgGb06rPnojXq5R1L_tSMURFZU109adHD-mo23Mc3Jv4M9lokGoj2y9TIfNQAKytu9eM-zMNWz-UkhwWSMtsiPMbtmACVCVqwYJNQqypArv6psgIY8QYADhNH3JcV-BQrgLwtRtPqjgpkvuxEs_oUYNG-fW8BYObQ727xyhBOBSP7ZKTZWLZRh_eTEgpZVGOYCqgdPKqgVN26-818ANj6xjYoTfhELvx7uKbuTcSJfzvh5OpubuEbCw0cNny69A5zGeVwiovTDmn6h8F2kb7A",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9a4bd8a1-6a0a-413e-b92f-19937c94e134",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e364905-049f-447c-a117-376b5f270224",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "GET /",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
