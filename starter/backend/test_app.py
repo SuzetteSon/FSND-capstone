@@ -4,7 +4,7 @@ import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app
+import app
 from models import setup_db, Movies, Actors
 
 
@@ -13,17 +13,13 @@ class HollywoodTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.app = create_app()
+        self.app = app.create_app()
         self.client = self.app.test_client
-        self.database_name = "hollywood"
+        self.database_name = "hollywood_test"
         self.database_path = "postgres://{}/{}".format(
             'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
-        self.new_movie = {
-            'title': "Happy Gilmore",
-            'release date': '2010'
-        }
 
         # binds the app to the current context
         with self.app.app_context():
@@ -38,7 +34,6 @@ class HollywoodTestCase(unittest.TestCase):
 
     def test_get_movies(self):
         """Test get movies success"""
-
         response = self.client().get('/movies')
 
         data = json.loads(response.data)
@@ -47,6 +42,17 @@ class HollywoodTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['movies'])
         self.assertTrue(len(data['movies']))
+
+    def test_get_actors(self):
+        """Test get actors success"""
+        response = self.client().get('/actors')
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['actors'])
+        self.assertTrue(len(data['actors']))
 
     # def test_get_paginated_questions(self):
     #     """Test get paginated questions success"""

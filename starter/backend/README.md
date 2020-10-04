@@ -5,7 +5,7 @@
 Capstone is the final project for the Udacity FullStack Nanodegree.
 This project consists of a database, API, Authorisation using Auth0 and deployed to Heroku
 
-The Casting Agency models a company that is responsible for creating movies and managing and assigning actors to those movies. I was assigned Executive Producer within the company and are creating a system to simplify and streamline the process.
+The Casting Agency models a company that is responsible for creating, updating, removing and viewing movies and actors. I was assigned Executive Producer within the company and are creating a system to simplify and streamline the process.
 
 ## Getting Started
 
@@ -52,14 +52,14 @@ From within the `backend` directory first ensure you are working using your crea
 To run the server, execute:
 
 ```bash
-export FLASK_APP=flaskr
+export FLASK_APP=app.py
 export FLASK_ENV=development
 flask run --reload
 ```
 
 Setting the `FLASK_ENV` variable to `development` will detect file changes and restart the server automatically.
 
-Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` directory and the `__init__.py` file to find the application. 
+Setting the `FLASK_APP` variable to `` directs flask to use the `flaskr` directory and the `__init__.py` file to find the application. 
 
 
 
@@ -265,8 +265,8 @@ PATCH '/actors/<id>'
 ## Testing
 To run the tests, run
 ```
-dropdb hollywood
-createdb hollywood
-psql hollywood < hollywood.psql
+dropdb hollywood_test
+createdb hollywood_test
+psql hollywood_test < hollywood.psql
 python3 test_app.py OR python test_app.py
 ```
