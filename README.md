@@ -43,7 +43,12 @@ This will install all of the required packages we selected within the `requireme
 
 ## Database Setup
 
-??
+While Postgres is running, restore a database using the file hollywood.psql as provided and run:
+
+```bash
+createdb hollywood
+psql hollywood < hollywood.psql
+```
 
 ## Running the server
 
@@ -72,11 +77,11 @@ Create an application and an API
 
 ### Environment variable to set up locally
 
-'''
+```bash
 export AUTH0_DOMAIN="{your-auth0-domain-here}.auth0.com"
 export ALGORITHMS="RS256"
 export API_AUDIENCE="{your-api-identifier}"
-'''
+```
 
 ### Roles & Permissions in API to setup in Auth0
 
@@ -96,15 +101,24 @@ Casting Director
 
 Enter your detailsi n the following link and require your JWT's
 
-'''
+```bash
 https://{{auth0-domain-here}}/authorize?audience={{api-identifier}}&response_type=token&client_id={{client-id}}&redirect_uri={{callback_uri}}
-'''
+```
 
 ### Set up the environment variables in the `setup.sh` file by running:
 
-'''
+```bash
 source ./setup.sh
-'''
+```
+
+## Testing
+To run the tests, run
+```
+dropdb hollywood_test
+createdb hollywood_test
+psql hollywood_test < hollywood.psql
+python3 test_app.py
+```
 
 ## Endpoints 
 
@@ -293,12 +307,3 @@ PATCH '/actors/<id>'
 
 
 
-
-## Testing
-To run the tests, run
-```
-dropdb hollywood_test
-createdb hollywood_test
-psql hollywood_test < hollywood.psql
-python3 test_app.py
-```
