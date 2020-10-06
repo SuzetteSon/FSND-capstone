@@ -13,6 +13,8 @@ class HollywoodTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
+        self.director_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTExNjY5MTYyMDA1ODAxNjEyMDE5IiwiYXVkIjpbImhvbGx5d29vZCIsImh0dHBzOi8vZnVsbHN0YWNrdWRhY2l0eS5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjAxOTg3Mzk1LCJleHAiOjE2MDIwNzM3OTUsImF6cCI6IldqM3FETWdaMGlOcUg0ZmNZaXFlWDFxVEhqcEJmU3R6Iiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDphY3RvcnNfaWQiLCJnZXQ6bW92aWVzIiwiZ2V0Om1vdmllc19pZCIsInBhdGNoOmFjdG9ycyIsInBhdGNoOm1vdmllcyIsInBvc3Q6YWN0b3JzIiwicG9zdDptb3ZpZXMiXX0.F941jsuKFsb96-MfNaQ1X0JQoD7Z5-cZn8tAz4_VhLaRiYgFTJwl4cxxmF7UMI6CGdjwAF2AHPRajn2JsEYWnUag-bqMOesJsD3QAkRwspYMbtigORAzgXrHsMEFMmLxH1t4htasCkgaZ1AgMk_1kpPUdYGiqaO7x_c6wXpWdGREOZDTN8m__Biw9HrTMvbFNYuCfoUT33LG6cSGqv1jA0pk5tOsDnFJb8Nrh_FGFTr3SIGMbTP7iuF6A6Y1bSBvA766Ffa6zyC-YvD6OuBtYEZ2nvAq-vyzzwoOhZ9-hEm24FlV8tvvd7VfpKGGteqXxDPlXbEQ3PTOrKACc6GuDQ"
+        self.assistant_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVmNGRmYjFmNTkzNTgwMDA2NzU1MTE4ZiIsImF1ZCI6ImhvbGx5d29vZCIsImlhdCI6MTYwMTk5MjM2MCwiZXhwIjoxNjAyMDc4NzU4LCJhenAiOiJXajNxRE1nWjBpTnFINGZjWWlxZVgxcVRIanBCZlN0eiIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZ2V0OmFjdG9ycyIsImdldDphY3RvcnNfaWQiLCJnZXQ6bW92aWVzIiwiZ2V0Om1vdmllc19pZCJdfQ.q5Yt99gblIec9meY51gspTkQT03gJRydMGiBdQ5UpZzf2yD799o_cfsGnf_GETK414Y93clGAilLbxiIx_lBoHgnPKz4688siUNV2mc1iTK1_yWeEUYjLMZZAGOTa5EA_iGz2blbFFgEak08MH_UtkJ0EvH2ZB_P312UWbPsYZTq3jVnoydMoR24KKNqao-zHpvfJPXYlK4Tz8FqNTKttUI1Qnit4rVLRxO58LFiNnDmgYF70MsZFzq5jAiz89EcR_unMRp_6IsMPVVfhkll3KkC3hcUcDU5olDBxqSWdwydjuXTRW-8rA4M84P7s5YJn9zRbLPhmAdn0wl5k9uM9w"
         self.app = app.create_app()
         self.client = self.app.test_client
         self.database_name = "hollywood_test"
@@ -32,9 +34,11 @@ class HollywoodTestCase(unittest.TestCase):
         """Executed after reach test"""
         pass
 
-    def test_get_movies(self):
+    def test_get_movies_director(self):
         """Test get movies success"""
-        response = self.client().get('/movies')
+        response = self.client().get('/movies', headers={
+            'Authorization': "Bearer {}".format(self.director_token)
+        })
 
         data = json.loads(response.data)
 
@@ -43,9 +47,48 @@ class HollywoodTestCase(unittest.TestCase):
         self.assertTrue(data['movies'])
         self.assertTrue(len(data['movies']))
 
+    def test_get_movies_unauth(self):
+        """Test RBAC - no token"""
+        response = self.client().get('/movies')
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data['message'], {
+            'code': 'authorization_header_missing', 
+            'description': 'Authorization header is expected.'
+        })
+
+    def test_get_movies_assistant(self):
+        """Test get movies success"""
+        response = self.client().get('/movies', headers={
+            'Authorization': "Bearer {}".format(self.assistant_token)
+        })
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['movies'])
+        self.assertTrue(len(data['movies']))
+
+    # def test_get_movies_unauth_assistant(self):
+    #     """Test RBAC for the Casting Assistant - no token"""
+    #     response = self.client().get('/movies')
+
+    #     data = json.loads(response.data)
+
+    #     self.assertEqual(response.status_code, 401)
+    #     self.assertEqual(data['message'], {
+    #         'code': 'authorization_header_missing', 
+    #         'description': 'Authorization header is expected.'
+    #     })
+
     def test_get_actors(self):
         """Test get actors success"""
-        response = self.client().get('/actors')
+        response = self.client().get('/actors', headers={
+            'Authorization': "Bearer {}".format(self.director_token)
+        })
 
         data = json.loads(response.data)
 
@@ -54,166 +97,318 @@ class HollywoodTestCase(unittest.TestCase):
         self.assertTrue(data['actors'])
         self.assertTrue(len(data['actors']))
 
-    # def test_get_paginated_questions(self):
-    #     """Test get paginated questions success"""
+    def test_get_actors_unauth_director(self):
+        """Test RBAC for the Casting Director - no token"""
+        response = self.client().get('/actors')
 
-    #     response = self.client().get('/questions')
+        data = json.loads(response.data)
 
-    #     data = json.loads(response.data)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data['message'], {
+            'code': 'authorization_header_missing', 
+            'description': 'Authorization header is expected.'
+        })
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertTrue(data['questions'])
-    #     self.assertTrue(len(data['questions']))
-    #     self.assertTrue(data['categories'])
+    def test_get_actors_unauth(self):
+        """Test RBAC - no token"""
+        response = self.client().get('/actors')
 
-    # def test_404_get_paginated_questions_beyond_valid_page(self):
-    #     """Test get paginated questions failure"""
+        data = json.loads(response.data)
 
-    #     response = self.client().get('/questions?page=1000')
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data['message'], {
+            'code': 'authorization_header_missing', 
+            'description': 'Authorization header is expected.'
+        })
 
-    #     data = json.loads(response.data)
-
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(data['success'], False)
-    #     self.assertEqual(data['message'], 'No matching request found.')
-
-    # def test_get_categories(self):
-    #     """Test get categories success"""
-
-    #     response = self.client().get('/categories')
-
-    #     data = json.loads(response.data)
-
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertTrue(data['categories'])
-
-    # def test_post_question(self):
-    #     """Test add question success"""
-
-    #     response = self.client().post('/questions', json={'question': "Who is the prime minister of Sweden?",
-    #     'answer': 'Stephan Luwren', 'difficulty': 5, 'category': 2})
+    # def test_get_movies_unauth_assistant(self):
+    #     """Test RBAC for the Casting Assistant - no token"""
+    #     response = self.client().get('/movies')
 
     #     data = json.loads(response.data)
 
-    #     question = Question.query.filter(Question.question == "Who is the prime minister of Sweden?").one_or_none()
+    #     self.assertEqual(response.status_code, 401)
+    #     self.assertEqual(data['message'], {
+    #         'code': 'authorization_header_missing', 
+    #         'description': 'Authorization header is expected.'
+    #     })
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertTrue(data['questions'])
-    #     self.assertTrue(len(data['questions']))
-    #     self.assertTrue(data['categories'])
-    #     self.assertEqual(question.format()['question'], "Who is the prime minister of Sweden?")
-    #     self.assertTrue(data['categories'])
+    def test_get_specific_movie(self):
+        """Test get specific movie success"""
 
+        response = self.client().get('/movies/13',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}
+        )
 
-    # def test_400_post_question_failed (self):
-    #     """Test add question failed - missing information provided"""
+        data = json.loads(response.data)
 
-    #     response = self.client().post('/questions', json={})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['movie'])
 
-    #     data = json.loads(response.data)
+    def test_get_specific_movie_invalid_id_provided(self):
+        """Test get specific movie failure - invalid id provided"""
 
-    #     self.assertEqual(response.status_code, 422)
-    #     self.assertEqual(data['success'], False)
-    #     self.assertEqual(data['message'], 'Unable to process the contained instructions.')
+        response = self.client().get('/movies/1000',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}
+        )
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'No matching request found.')
+
+    def test_get_specific_actor(self):
+        """Test get specific actor success"""
+
+        response = self.client().get('/actors/6',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}
+        )
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['actor'])
+
+    def test_get_specific_actor_invalid_id_provided(self):
+        """Test get specific actor failure - invalid id provided"""
+
+        response = self.client().get('/actors/1000',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}
+        )
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'No matching request found.')
+
+    def test_post_movie(self):
+        """Test add movie success"""
+
+        response = self.client().post('/movies',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}, 
+            json={'title': "Joker",
+                'release_date': '2019-07-04*13:23:55'}
+        )
+
+        data = json.loads(response.data)
+
+        movie = Movies.query.filter(Movies.title == "Joker").one_or_none()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(movie.title, "Joker")
+
+    def test_post_movie_failed (self):
+        """Test add movie failed - missing information provided"""
+
+        response = self.client().post('/movies',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}, 
+            json={}
+        )
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Unable to process the contained instructions.')
         
-    # def test_search_question (self):
-    #     """Test search question success"""
 
-    #     response = self.client().post('/questions/search', json={'searchTerm': 'Anne'})
+    def test_post_actor(self):
+        """Test add actor success"""
 
-    #     data = json.loads(response.data)
+        response = self.client().post('/actors',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}, 
+            json={'name': "Blake Lively",
+                'age': '35', 'gender': 'female'}
+        )
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertEqual(len(data['questions']), 1)
-    #     self.assertEqual(data['questions'][0]['id'], 4)
-    #     self.assertTrue(data['total_questions'])
+        data = json.loads(response.data)
 
-    # def test_404_search_question (self):
-    #     """Test search question failure searchTerm not provided"""
+        actor = Actors.query.filter(Actors.name == "Blake Lively").one_or_none()
 
-    #     response = self.client().post('/questions/search', json={})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(actor.name, "Blake Lively")
 
-    #     data = json.loads(response.data)
+    def test_post_movies_assistant(self):
+        """Test RBAC Assistant - not authorised"""
+        response = self.client().post('/movies', headers={
+            'Authorization': "Bearer {}".format(self.assistant_token)}, 
+            json={'title': "The Hobbit",
+                'release_date': '2019-07-04*13:23:55'}
+        )
 
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(data['success'], False)
-    #     self.assertEqual(data['message'], 'No matching request found.')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(data['message'], {
+            'code': 'unauthorized',
+            'description': 'Permission not found.'
+        })
     
-    # def test_delete_question(self):
-    #     """Test delete question success"""
+    def test_post_actor_failed (self):
+        """Test add actor failed - missing information provided"""
 
-    #     response = self.client().delete('/questions/5')
+        response = self.client().post('/actors',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}, 
+            json={}
+        )
 
-    #     data = json.loads(response.data)
+        data = json.loads(response.data)
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertTrue(data['questions'])
-    #     self.assertTrue(len(data['questions']))
-    #     self.assertTrue(data['categories'])
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Unable to process the contained instructions.')
 
-    # def test_404_delete_question_not_found(self):
-    #     """Test delete question not found"""
+    def test_patch_movie(self):
+        """Test add movie success"""
 
-    #     response = self.client().delete('/questions/1000')
+        response = self.client().patch('/movies/13',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}, 
+            json={'title': "The Hobbit II",
+                'release_date': '2019-07-04*13:23:55'}
+        )
 
-    #     data = json.loads(response.data)
+        data = json.loads(response.data)
 
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(data['success'], False)
-    #     self.assertEqual(data['message'], 'No matching request found.')
+        movie = Movies.query.filter(Movies.title == "The Hobbit II").one_or_none()
 
-    # def test_get_specific_category_questions(self):
-    #     """Test get specificcategories questions success"""
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(movie.title, "The Hobbit II")
 
-    #     response = self.client().get('/categories/6/questions')
+    def test_patch_movie_failed (self):
+        """Test add movie failed - error in request provided"""
 
-    #     data = json.loads(response.data)
+        response = self.client().patch('/movies/3',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}, 
+            json={'the title': "The Hobbit II"}
+        )
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertTrue(len(data['questions']), 2)
-    #     self.assertTrue(data['total_questions'])
+        data = json.loads(response.data)
 
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Unable to process the contained instructions.')
 
-    # def test_get_specific_category_questions_fail(self):
-    #     """Test get specific categories questions failure"""
+    def test_patch_actor(self):
+        """Test add actor success"""
 
-    #     response = self.client().get('/categories/1000/questions')
+        response = self.client().patch('/actors/7',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}, 
+            json={'name': "Blake Lively-Reynolds",
+                'age': '35', 'gender': 'female'}
+        )
 
-    #     data = json.loads(response.data)
+        data = json.loads(response.data)
 
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(data['success'], False)
-    #     self.assertEqual(data['message'], 'No matching request found.')
+        actor = Actors.query.filter(Actors.name == "Blake Lively-Reynolds").one_or_none()
 
-    # def test_post_quizzes(self):
-    #     """Test post quizzes success"""
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(actor.name, "Blake Lively-Reynolds")
 
-    #     response = self.client().post('/quizzes', json={'quiz_category': {'type': 'Science', 'id': '1'}, 'previous_questions':  [1, 22]})
+    def test_patch_actors_assistant(self):
+        """Test RBAC Assistant - not authorised"""
+        response = self.client().patch('/actors/1', headers={
+            'Authorization': "Bearer {}".format(self.assistant_token)}, 
+            json={'name': "Blake Lively",
+                'age': '35', 'gender': 'female'}
+        )
 
-    #     data = json.loads(response.data)
+        data = json.loads(response.data)
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertTrue(data['question'])
-    #     self.assertTrue(data['previousQuestions'])
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(data['message'], {
+            'code': 'unauthorized',
+            'description': 'Permission not found.'
+        })
 
-    # def test_post_quizzes_failure(self):
-    #     """Test post quizzes failure"""
+    def test_patch_actor_failed (self):
+        """Test add actor failed - error in request provided"""
 
-    #     response = self.client().post('/quizzes', json={})
+        response = self.client().patch('/actors/5',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}, 
+            json={'names': "Ben Jeremy Afleck"}
+        )
 
-    #     data = json.loads(response.data)
+        data = json.loads(response.data)
 
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(data['success'], False)
-    #     self.assertEqual(data['message'], 'No matching request found.')
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Unable to process the contained instructions.')
 
+    def test_delete_movie(self):
+        """Test delete movie success"""
+
+        response = self.client().delete('/movies/12', 
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}
+        )
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['deleted_movie'])
+
+    def test_delete_movie_invalid_id_provided(self):
+        """Test delete movie failure - invalid id provided"""
+
+        response = self.client().get('/movies/1000',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}
+        )
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'No matching request found.')
+
+    def test_delete_actor(self):
+        """Test delete actor success"""
+
+        response = self.client().delete('/actors/5', 
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}
+        )
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['deleted_actor'])
+    
+    def test_delete_actor_invalid_id_provided(self):
+        """Test delete actor failure - invalid id provided"""
+
+        response = self.client().get('/actors/1000',  
+            headers={
+                'Authorization': "Bearer {}".format(self.director_token)}
+        )
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'No matching request found.')
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

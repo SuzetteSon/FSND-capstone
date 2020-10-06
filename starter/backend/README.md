@@ -61,31 +61,63 @@ Setting the `FLASK_ENV` variable to `development` will detect file changes and r
 
 Setting the `FLASK_APP` variable to `` directs flask to use the `flaskr` directory and the `__init__.py` file to find the application. 
 
+## Postman Collection
 
+I have uploaded a postman collection called `Capstone.postman_collection.json` in this repo containing the endpoints and jwt's required to test the endpoints.
 
-## Endpoints & Authorisation
+## Auth0 setup
 
-### Roles as setup in Auth0
+Set up an [Auth0](https://manage.auth0.com/) account 
+Create an application and an API
+
+### Environment variable to set up locally
+
+'''
+export AUTH0_DOMAIN="{your-auth0-domain-here}.auth0.com"
+export ALGORITHMS="RS256"
+export API_AUDIENCE="{your-api-identifier}"
+'''
+
+### Roles & Permissions in API to setup in Auth0
 
 Casting Assistant 
-- Can view actors and movies (GET '/movies', GET '/actors', GET '/movies/<id>', GET '/actors/<id>')
+- Can view actors and movies 
+    - Permissions: (GET '/movies', GET '/actors', GET '/movies/<id>', GET '/actors/<id>')
+
 Casting Director
-- Can view actors and movies (GET '/movies', GET '/actors', GET '/movies/<id>', GET '/actors/<id>')
-- Add or delete an actor from the database (DELETE '/movies/<id>', DELETE '/actors/<id>', POST '/movies', POST '/actors')
-- Modify actors or movies (PATCH '/movies', PATCH '/actors')
+- Can view actors and movies 
+    - Permissions: (GET '/movies', GET '/actors', GET '/movies/<id>', GET '/actors/<id>')
+- Add or delete an actor from the database 
+    - Permissions: (DELETE '/movies/<id>', DELETE '/actors/<id>', POST '/movies', POST '/actors')
+- Modify actors or movies 
+    - Permissions: (PATCH '/movies', PATCH '/actors')
 
-### Endpoints
+### Obtain and set JWT tokens
 
-GET '/movies'
-GET '/actors'
-GET '/movies/<id>'
-GET '/actors/<id>'
-DELETE '/movies/<id>'
-DELETE '/actors/<id>'
-POST '/movies'
-POST '/actors'
-PATCH '/movies'
-PATCH '/actors'
+Enter your detailsi n the following link and require your JWT's
+
+'''
+https://{{auth0-domain-here}}/authorize?audience={{api-identifier}}&response_type=token&client_id={{client-id}}&redirect_uri={{callback_uri}}
+'''
+
+### Set up the environment variables in the `setup.sh` file by running:
+
+'''
+source ./setup.sh
+'''
+
+## Endpoints 
+
+- GET '/movies'
+- GET '/actors'
+- GET '/movies/<id>'
+- GET '/actors/<id>'
+- DELETE '/movies/<id>'
+- DELETE '/actors/<id>'
+- POST '/movies'
+- POST '/actors'
+- PATCH '/movies'
+- PATCH '/actors'
 
 
 GET '/movies'
@@ -268,5 +300,5 @@ To run the tests, run
 dropdb hollywood_test
 createdb hollywood_test
 psql hollywood_test < hollywood.psql
-python3 test_app.py OR python test_app.py
+python3 test_app.py
 ```

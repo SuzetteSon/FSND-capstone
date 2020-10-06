@@ -62,9 +62,8 @@ def create_app(test_config=None):
   GET /movies
   '''
   @app.route('/movies', methods=['GET'])
-  # @requires_auth('get:movies')
-  # def get_all_movies(jwt):
-  def get_all_movies():
+  @requires_auth('get:movies')
+  def get_all_movies(jwt):
     try:
       movies = Movies.query.all()
       movie_data = []
@@ -75,7 +74,7 @@ def create_app(test_config=None):
           "release_date": movie.release_date
         })
     except BaseException:
-        abort(404)   
+        abort(401)   
     return jsonify({
         'success': True,
         'movies': movie_data
@@ -98,8 +97,8 @@ def create_app(test_config=None):
           "age": actor.age, 
           "gender": actor.gender
         })
-    except:
-      print('error') 
+    except BaseException:
+        abort(401)   
     return jsonify({
         'success': True,
         'actors': actor_data
@@ -351,6 +350,12 @@ def create_app(test_config=None):
         'updated_actor': actor_data[0]
     }), 200
 
+  @app.errorhandler(AuthError)
+  def auth_error(error):
+    return jsonify({
+      'message': error.error
+    }), error.status_code
+
   @app.errorhandler(400)
   def bad_request(error):
     return jsonify({
@@ -358,6 +363,14 @@ def create_app(test_config=None):
       'error': 400,
       'message': 'Request not understood due to malformed syntax.'
     }), 400
+
+  @app.errorhandler(401)
+  def unauthorized(error):
+    return jsonify({
+      'success': False,
+      'error': 401,
+      'message': 'Request unauthorized.'
+    }), 401
 
   @app.errorhandler(404)
   def not_found(error):
