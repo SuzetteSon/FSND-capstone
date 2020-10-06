@@ -5,8 +5,8 @@ from flask_migrate import Migrate
 import json
 
 database_name = "hollywood"
-database_path = "postgres://{}/{}".format('localhost:5432', database_name)
-
+# database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+database_path = "postgres://icdgncuvkxxmyk:af8d22d1bd8c79cdb09f4f53b5185693e94fda25876d470a278c32dfffa9af55@ec2-18-211-86-133.compute-1.amazonaws.com:5432/d321idjd2iesh2"
 db = SQLAlchemy()
 
 #migrate = Migrate(app, db)
