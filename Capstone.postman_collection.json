@@ -9,6 +9,39 @@
 			"name": "Casting Director",
 			"item": [
 				{
+					"name": "/movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/movies",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/movies/id",
 					"request": {
 						"method": "GET",
@@ -68,6 +101,37 @@
 							"port": "5000",
 							"path": [
 								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"age\": \"30\",\n      \"gender\": false,\n      \"name\": \"Sharon Stone\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/actors",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actors"
 							]
 						}
 					},
@@ -138,37 +202,6 @@
 					"response": []
 				},
 				{
-					"name": "/actors",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n      \"age\": \"30\",\n      \"gender\": false,\n      \"name\": \"Sharon Stone\"\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://127.0.0.1:5000/actors",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "5000",
-							"path": [
-								"actors"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "/movies/id",
 					"request": {
 						"method": "DELETE",
@@ -201,28 +234,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "/movies",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": ""
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/actors",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": ""
-						}
-					},
-					"response": []
 				}
 			],
 			"auth": {
@@ -230,7 +241,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTExNjY5MTYyMDA1ODAxNjEyMDE5IiwiYXVkIjpbImhvbGx5d29vZCIsImh0dHBzOi8vZnVsbHN0YWNrdWRhY2l0eS5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjAxNjI2NDc1LCJleHAiOjE2MDE2MzM2NzUsImF6cCI6IldqM3FETWdaMGlOcUg0ZmNZaXFlWDFxVEhqcEJmU3R6Iiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTogYWN0b3JzIiwiZGVsZXRlOm1vdmllcyIsImdldDphY3RvcnMiLCJnZXQ6YWN0b3JzX2lkIiwiZ2V0Om1vdmllcyIsImdldDptb3ZpZXNfaWQiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.GJOQdAWDnTEbezNaD4XIqz6vbjZzmVXE1x9nYI-E2reAOY8a_gagDDqhYrMUaUUnpiCemclMnCcKzbLG8IMiaxqp9N3IKuOTnWVHer4KqeZLNSmWRpDfncrOC_-w3P_VSxwo0aEaCR-mOP4MArYF6UFBPcSiS0QtwSv4EciKshioPgBgRCvUQgpng3LKhm4QIjAM0j4X07rJNXP2Z9KhsIq-8S9JiupFa1T--7ISvtUmpExImGM3yDlO2F-4tVVRXr-vrtLbAyrhIZElZfUR6ul67yUvOV0QKmQGEVDZ7u7AIqaDoy-vAmYgLYMbWN3aEMWtFQ7pNi5rg8BnYxI9NQ",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTExNjY5MTYyMDA1ODAxNjEyMDE5IiwiYXVkIjpbImhvbGx5d29vZCIsImh0dHBzOi8vZnVsbHN0YWNrdWRhY2l0eS5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjAyMDczMjcyLCJleHAiOjE2MDIxNTk2NzAsImF6cCI6IldqM3FETWdaMGlOcUg0ZmNZaXFlWDFxVEhqcEJmU3R6Iiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDphY3RvcnNfaWQiLCJnZXQ6bW92aWVzIiwiZ2V0Om1vdmllc19pZCIsInBhdGNoOmFjdG9ycyIsInBhdGNoOm1vdmllcyIsInBvc3Q6YWN0b3JzIiwicG9zdDptb3ZpZXMiXX0.jSGra0CVADBhtsWGVhPXaRSSCiCtqpzjih3p6RxxQpFeNYbOhVOgAEAaNiVDfZchrUl2w-mGdjbqujFfCjpxXEtaFUyJJxAsfP2tw9w8UxNB9rX-kiUahOvKALR30TMu_p5flBrA6MnItB4zYN_qLYNX5TPiiuUElUU3kxnAwyHQkMTb6LOyzmS-UCTFyzAJQt84Z_vUJpNAf7Mx42TfMitslEbfmeTCaIkzFgxtq0NwdIL_o63zCNBlxFXUm_jXTmZCq2LsJ5RvhCv0KWp900jfYhABJvHrxSCAGRHq7lZb51ipWnw16r9oaosTlyPeisDAjoPeYHOvnLnHmUFfvQ",
 						"type": "string"
 					}
 				]
@@ -263,7 +274,52 @@
 			"name": "Casting Assistant",
 			"item": [
 				{
+					"name": "/actors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/actor/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actor",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/movies/id",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -276,10 +332,85 @@
 				{
 					"name": "/actors",
 					"request": {
-						"method": "GET",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"age\": \"30\",\n      \"gender\": false,\n      \"name\": \"Sharon Stone\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/actors",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors/id",
+					"request": {
+						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://127.0.0.1:5000/actors/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actors",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/actors/id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"gloria\",\n    \"age\": \"44\",\n    \"gender\": \"F\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/actors/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actors",
+								"2"
+							]
 						}
 					},
 					"response": []
@@ -290,7 +421,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVmNGRmYjFmNTkzNTgwMDA2NzU1MTE4ZiIsImF1ZCI6ImhvbGx5d29vZCIsImlhdCI6MTYwMTYyMjk4NiwiZXhwIjoxNjAxNjMwMTg2LCJhenAiOiJXajNxRE1nWjBpTnFINGZjWWlxZVgxcVRIanBCZlN0eiIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiXX0.VhFT4pUlF11uucw8tvx9bINGZoRtI2AqINL15I4axIjODJlqf2rg5rd1vLXGGSkg4EgGb06rPnojXq5R1L_tSMURFZU109adHD-mo23Mc3Jv4M9lokGoj2y9TIfNQAKytu9eM-zMNWz-UkhwWSMtsiPMbtmACVCVqwYJNQqypArv6psgIY8QYADhNH3JcV-BQrgLwtRtPqjgpkvuxEs_oUYNG-fW8BYObQ727xyhBOBSP7ZKTZWLZRh_eTEgpZVGOYCqgdPKqgVN26-818ANj6xjYoTfhELvx7uKbuTcSJfzvh5OpubuEbCw0cNny69A5zGeVwiovTDmn6h8F2kb7A",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVmNGRmYjFmNTkzNTgwMDA2NzU1MTE4ZiIsImF1ZCI6ImhvbGx5d29vZCIsImlhdCI6MTYwMjA3MzQzMywiZXhwIjoxNjAyMTU5ODMxLCJhenAiOiJXajNxRE1nWjBpTnFINGZjWWlxZVgxcVRIanBCZlN0eiIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZ2V0OmFjdG9ycyIsImdldDphY3RvcnNfaWQiLCJnZXQ6bW92aWVzIiwiZ2V0Om1vdmllc19pZCJdfQ.QBhFVdFQdVoILM9xaDB0NkUIY0ywLgdt3F_SXYxz8ZMyLvutRnVL9ES-IM9WCNmMhQ8m81SEXBiE5LaJWEvWLLMPvClHFrMVefen8MyU2wUC4XG3c0nidjWcw2IAsWAZk6DnPPf0vswk2qC-jiP40c7CRFXT9WS1BW8hfOD-iL4t_JhEzPOHMrNaKIK1o_6RpMsPQEj5QFVBqbW7lE-PtmvGGDcNuRN-9XzwQ-iRnHVB8Z1FWb5RB3cAY2qePiznt2rhOCBwh3ZYrkhJFiY0GMfsixAOtOA064xMUWHB-tCuQJa1BpqZOV6akcvaqmGHM4RUrTmRihfJaxVnO8xsUA",
 						"type": "string"
 					}
 				]

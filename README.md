@@ -1,17 +1,17 @@
-# Capstone Project
+# Capstone Project: Hollywood
 
 ## Motivation
 
 Capstone is the final project for the Udacity FullStack Nanodegree.
-This project consists of a database, API, Authorisation using Auth0 and deployed to Heroku
+The project consists of a database, API, Authorisation using Auth0 and deployed to Heroku.
 
-The Casting Agency models a company that is responsible for creating, updating, removing and viewing movies and actors. I was assigned Executive Producer within the company and are creating a system to simplify and streamline the process.
+Hollywood models a casting company that is responsible for creating, updating, removing and viewing movies and actors. I was assigned Executive Producer within the company and are creating a system to simplify and streamline the process.
 
 ## Getting Started
 
 ### Heroku Link
 
-[Capestone project link](https://hollywood22.herokuapp.com/)
+[Link to Hollywood API](https://hollywood22.herokuapp.com/)
 
 ### Installing Dependencies
 
