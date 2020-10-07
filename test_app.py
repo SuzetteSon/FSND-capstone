@@ -13,17 +13,17 @@ class HollywoodTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.director_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTExNjY5MTYyMDA1ODAxNjEyMDE5IiwiYXVkIjpbImhvbGx5d29vZCIsImh0dHBzOi8vZnVsbHN0YWNrdWRhY2l0eS5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjAxOTg3Mzk1LCJleHAiOjE2MDIwNzM3OTUsImF6cCI6IldqM3FETWdaMGlOcUg0ZmNZaXFlWDFxVEhqcEJmU3R6Iiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDphY3RvcnNfaWQiLCJnZXQ6bW92aWVzIiwiZ2V0Om1vdmllc19pZCIsInBhdGNoOmFjdG9ycyIsInBhdGNoOm1vdmllcyIsInBvc3Q6YWN0b3JzIiwicG9zdDptb3ZpZXMiXX0.F941jsuKFsb96-MfNaQ1X0JQoD7Z5-cZn8tAz4_VhLaRiYgFTJwl4cxxmF7UMI6CGdjwAF2AHPRajn2JsEYWnUag-bqMOesJsD3QAkRwspYMbtigORAzgXrHsMEFMmLxH1t4htasCkgaZ1AgMk_1kpPUdYGiqaO7x_c6wXpWdGREOZDTN8m__Biw9HrTMvbFNYuCfoUT33LG6cSGqv1jA0pk5tOsDnFJb8Nrh_FGFTr3SIGMbTP7iuF6A6Y1bSBvA766Ffa6zyC-YvD6OuBtYEZ2nvAq-vyzzwoOhZ9-hEm24FlV8tvvd7VfpKGGteqXxDPlXbEQ3PTOrKACc6GuDQ"
-        self.assistant_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkxMWUZDZGdXQkl2bFQ4NHZmUmNfLSJ9.eyJpc3MiOiJodHRwczovL2Z1bGxzdGFja3VkYWNpdHkuZXUuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVmNGRmYjFmNTkzNTgwMDA2NzU1MTE4ZiIsImF1ZCI6ImhvbGx5d29vZCIsImlhdCI6MTYwMTk5MjM2MCwiZXhwIjoxNjAyMDc4NzU4LCJhenAiOiJXajNxRE1nWjBpTnFINGZjWWlxZVgxcVRIanBCZlN0eiIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZ2V0OmFjdG9ycyIsImdldDphY3RvcnNfaWQiLCJnZXQ6bW92aWVzIiwiZ2V0Om1vdmllc19pZCJdfQ.q5Yt99gblIec9meY51gspTkQT03gJRydMGiBdQ5UpZzf2yD799o_cfsGnf_GETK414Y93clGAilLbxiIx_lBoHgnPKz4688siUNV2mc1iTK1_yWeEUYjLMZZAGOTa5EA_iGz2blbFFgEak08MH_UtkJ0EvH2ZB_P312UWbPsYZTq3jVnoydMoR24KKNqao-zHpvfJPXYlK4Tz8FqNTKttUI1Qnit4rVLRxO58LFiNnDmgYF70MsZFzq5jAiz89EcR_unMRp_6IsMPVVfhkll3KkC3hcUcDU5olDBxqSWdwydjuXTRW-8rA4M84P7s5YJn9zRbLPhmAdn0wl5k9uM9w"
+        self.director_token = "" # Enter your casting director JWT here
+        self.assistant_token = "" # Enter your casting assistant JWT here
         self.app = app.create_app()
         self.client = self.app.test_client
         self.database_name = "hollywood_test"
+        #self.database_path = "postgres://icdgncuvkxxmyk:af8d22d1bd8c79cdb09f4f53b5185693e94fda25876d470a278c32dfffa9af55@ec2-18-211-86-133.compute-1.amazonaws.com:5432/d321idjd2iesh2"
+
         self.database_path = "postgres://{}/{}".format(
-            'localhost:5432', self.database_name)
+           'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
-
-        # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
@@ -410,6 +410,6 @@ class HollywoodTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'No matching request found.')
 
-# Make the tests conveniently executable
+
 if __name__ == "__main__":
     unittest.main()

@@ -53,10 +53,9 @@ def create_app(test_config=None):
   app.jinja_env.filters['datetime'] = format_datetime
 
 
-
   @app.route('/')
   def index():
-    return "hello world"
+    return "Hello world! Please refer to the README of this project to continue."
 
   '''
   GET /movies
@@ -74,10 +73,10 @@ def create_app(test_config=None):
           "release_date": movie.release_date
         })
     except BaseException:
-        abort(401)   
+      abort(401)   
     return jsonify({
-        'success': True,
-        'movies': movie_data
+      'success': True,
+      'movies': movie_data
     }), 200
 
   '''
@@ -98,10 +97,10 @@ def create_app(test_config=None):
           "gender": actor.gender
         })
     except BaseException:
-        abort(401)   
+      abort(401)   
     return jsonify({
-        'success': True,
-        'actors': actor_data
+      'success': True,
+      'actors': actor_data
     }), 200
 
   '''
@@ -112,7 +111,6 @@ def create_app(test_config=None):
   def get_movie(jwt, id):
     try:
       movie = Movies.query.get(id)
-
       movie_data = []
 
       movie_data.append({
@@ -121,10 +119,10 @@ def create_app(test_config=None):
         "release_date": movie.release_date
         })
     except BaseException:
-        abort(404)   
+      abort(404)   
     return jsonify({
-        'success': True,
-        'movie': movie_data[0]
+      'success': True,
+      'movie': movie_data[0]
     }), 200
 
   '''
@@ -144,10 +142,10 @@ def create_app(test_config=None):
         "gender": actor.gender
       })
     except BaseException:
-        abort(404)   
+      abort(404)   
     return jsonify({
-        'success': True,
-        'actor': actor_data[0]
+      'success': True,
+      'actor': actor_data[0]
     }), 200
 
   '''
@@ -168,10 +166,10 @@ def create_app(test_config=None):
       })
     
     except BaseException:
-        abort(404)   
+      abort(404)   
     return jsonify({
-        'success': True,
-        'deleted_movie': movie_data[0]
+      'success': True,
+      'deleted_movie': movie_data[0]
     }), 200
 
   '''
@@ -192,10 +190,10 @@ def create_app(test_config=None):
       })
     
     except BaseException:
-        abort(404)   
+      abort(404)   
     return jsonify({
-        'success': True,
-        'deleted_actor': actor_data[0]
+      'success': True,
+      'deleted_actor': actor_data[0]
     }), 200
 
 
@@ -213,10 +211,8 @@ def create_app(test_config=None):
       abort(422)
 
     try:
-      movie = Movies(title=new_title, release_date=new_release_date )
-      
+      movie = Movies(title=new_title, release_date=new_release_date)
       movie.insert()
-
       movie_data = []
 
       movie_data.append({
@@ -226,10 +222,10 @@ def create_app(test_config=None):
         })
 
     except BaseException:
-        abort(404)   
+      abort(404)   
     return jsonify({
-        'success': True,
-        'created_movie': movie_data[0]
+      'success': True,
+      'created_movie': movie_data[0]
     }), 200
 
   '''
@@ -251,7 +247,6 @@ def create_app(test_config=None):
       actor.name = body['name']
       actor.gender = body['gender']
       actor.age = body['age']
-      
       actor.insert()
 
       actor_data = []
@@ -266,8 +261,8 @@ def create_app(test_config=None):
     except BaseException:
       abort(404)   
     return jsonify({
-        'success': True,
-        'created_actor': actor_data[0]
+      'success': True,
+      'created_actor': actor_data[0]
     }), 200
 
 
@@ -288,7 +283,6 @@ def create_app(test_config=None):
     try:
 
       movie = Movies.query.get(id)
-      #movies = Movies.query.order_by(Movies.id).all()
 
       if new_title:
         movie.title = new_title
@@ -309,8 +303,8 @@ def create_app(test_config=None):
     except BaseException:
       abort(404)    
     return jsonify({
-        'success': True,
-        'updated_movie': movie_data[0]
+      'success': True,
+      'updated_movie': movie_data[0]
     }), 200
 
   '''
@@ -346,8 +340,8 @@ def create_app(test_config=None):
     except BaseException:
       abort(404)    
     return jsonify({
-        'success': True,
-        'updated_actor': actor_data[0]
+      'success': True,
+      'updated_actor': actor_data[0]
     }), 200
 
   @app.errorhandler(AuthError)

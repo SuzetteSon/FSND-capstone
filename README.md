@@ -52,7 +52,7 @@ psql hollywood < hollywood.psql
 
 ## Running the server
 
-From within the `backend` directory first ensure you are working using your created virtual environment.
+First ensure you are working using your created virtual environment.
 
 To run the server, execute:
 
@@ -68,7 +68,7 @@ Setting the `FLASK_APP` variable to `` directs flask to use the `flaskr` directo
 
 ## Postman Collection
 
-I have uploaded a postman collection called `Capstone.postman_collection.json` in this repo containing the endpoints and jwt's required to test the endpoints.
+I have uploaded a postman collection called `Capstone.postman_collection.json` in this repo containing the endpoints and jwt's required to test the endpoints. At the time of submission, this collection contains active JWT's.
 
 ## Auth0 setup
 
@@ -99,7 +99,7 @@ Casting Director
 
 ### Obtain and set JWT tokens
 
-Enter your detailsi n the following link and require your JWT's
+Enter your details  in the following link and require your JWT's
 
 ```bash
 https://{{auth0-domain-here}}/authorize?audience={{api-identifier}}&response_type=token&client_id={{client-id}}&redirect_uri={{callback_uri}}
@@ -112,7 +112,7 @@ source ./setup.sh
 ```
 
 ## Testing
-To run the tests, run
+Before running the tests, ensure to put your JWT's the the `test_app.py` file. Then run:
 ```
 dropdb hollywood_test
 createdb hollywood_test
