@@ -7,22 +7,23 @@ from flask_sqlalchemy import SQLAlchemy
 import app
 from models import setup_db, Movies, Actors
 
+DIRECTOR_JWT = os.environ.get('DIRECTOR_JWT')
+ASSISTANT_JWT = os.environ.get('ASSISTANT_JWT')
+ASSISTANT_JWT = os.environ.get('ASSISTANT_JWT')
 
 class HollywoodTestCase(unittest.TestCase):
     """This class represents the hollywood test case"""
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.director_token = "" # Enter your casting director JWT here
-        self.assistant_token = "" # Enter your casting assistant JWT here
+        self.director_token = DIRECTOR_JWT
+        self.assistant_token = ASSISTANT_JWT
         self.app = app.create_app()
         self.client = self.app.test_client
         self.database_name = "hollywood_test"
-        #self.database_path = "postgres://icdgncuvkxxmyk:af8d22d1bd8c79cdb09f4f53b5185693e94fda25876d470a278c32dfffa9af55@ec2-18-211-86-133.compute-1.amazonaws.com:5432/d321idjd2iesh2"
 
         self.database_path = "postgres://{}/{}".format(
            'localhost:5432', self.database_name)
-        setup_db(self.app, self.database_path)
 
         with self.app.app_context():
             self.db = SQLAlchemy()
