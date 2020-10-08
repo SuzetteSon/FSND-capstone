@@ -112,11 +112,8 @@ source ./setup.sh
 ```
 
 ## Testing
-Before running the tests, ensure to put your JWT's the the `test_app.py` file. Then run:
+To run the tests, run:
 ```
-dropdb hollywood_test
-createdb hollywood_test
-psql hollywood_test < hollywood.psql
 python3 test_app.py
 ```
 

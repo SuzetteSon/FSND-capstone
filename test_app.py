@@ -10,6 +10,8 @@ from models import setup_db, Movies, Actors
 DIRECTOR_JWT = os.environ.get('DIRECTOR_JWT')
 ASSISTANT_JWT = os.environ.get('ASSISTANT_JWT')
 ASSISTANT_JWT = os.environ.get('ASSISTANT_JWT')
+DATABASE_PATH= os.environ.get('DATABASE_PATH')
+
 
 class HollywoodTestCase(unittest.TestCase):
     """This class represents the hollywood test case"""
@@ -20,10 +22,12 @@ class HollywoodTestCase(unittest.TestCase):
         self.assistant_token = ASSISTANT_JWT
         self.app = app.create_app()
         self.client = self.app.test_client
-        self.database_name = "hollywood_test"
-
-        self.database_path = "postgres://{}/{}".format(
-           'localhost:5432', self.database_name)
+        self.database_path = DATABASE_PATH
+        
+        # self.database_name = "hollywood_test"
+        # self.database_path = "postgres://{}/{}".format(
+        #    'localhost:5432', self.database_name)
+        
 
         with self.app.app_context():
             self.db = SQLAlchemy()
